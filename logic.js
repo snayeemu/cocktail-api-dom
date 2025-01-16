@@ -120,9 +120,6 @@ const showDetails = (idDrink, setItem=true) => {
               >
                 Close
               </button>
-              <button type="button" class="btn btn-primary">
-                Save changes
-              </button>
             </div>
     `
     
