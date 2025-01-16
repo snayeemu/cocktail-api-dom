@@ -1,16 +1,17 @@
 let items = [];
 let cartItems = [];
-let detailsItem = []
-// initial fetching
-const getData = (w = "s=i", query='search') => {
+let detailsItem = [];
+
+// this is used to fetch any kind of data
+const getData = (w = "s=i", query = "search") => {
   fetch(`https://www.thecocktaildb.com/api/json/v1/1/${query}.php?${w}`)
     .then((res) => res.json())
     .then((data) => {
-      if(query=='lookup'){
+      if (query == "lookup") {
         detailsItem = data?.drinks[0];
         console.log(detailsItem);
-        showDetails('', false);
-        return
+        showDetails("", false);
+        return;
       }
       items = data?.drinks;
       console.log(items);
@@ -23,7 +24,11 @@ getData();
 const showCards = () => {
   const cardsContainer = document.getElementById("cocktail-items");
   cardsContainer.innerHTML = "";
-
+  if (!items) {
+    cardsContainer.innerHTML =
+      "<h1 class='text-center mx-auto'>Item not found!!!</h1>";
+    return;
+  }
   items.map((item) => {
     cardsContainer.innerHTML += `
         <div class="card mt-3 mx-auto" style="width: 18rem">
@@ -45,7 +50,9 @@ const showCards = () => {
                 <button class="btn btn-light border-secondary" id="btn-add-to-cart" onclick="addToCart(event, ${
                   item?.idDrink
                 })">Add to Cart</button>
-                <button class="btn btn-light border-secondary" onclick="showDetails(${item?.idDrink})" data-bs-toggle="modal" data-bs-target="#detailsModal">Details</button>
+                <button class="btn btn-light border-secondary" onclick="showDetails(${
+                  item?.idDrink
+                })" data-bs-toggle="modal" data-bs-target="#detailsModal">Details</button>
             </div>
           </div>
         </div>
@@ -84,14 +91,12 @@ const addToCart = (e, idDrink) => {
   `;
 };
 
-const showDetails = (idDrink, setItem=true) => {
-  if(setItem)
-    getData(`i=${idDrink}`, "lookup");
-  else{
-    console.log('working')
+const showDetails = (idDrink, setItem = true) => {
+  if (setItem) getData(`i=${idDrink}`, "lookup");
+  else {
+    console.log("working");
     modalContent = document.getElementById("modal-content");
-    modalContent.innerHTML =
-    `
+    modalContent.innerHTML = `
             <div class="modal-header">
               <h1 class="modal-title fs-5" id="modalHeading">
                  ${detailsItem?.strDrink}
@@ -121,7 +126,6 @@ const showDetails = (idDrink, setItem=true) => {
                 Close
               </button>
             </div>
-    `
-    
+    `;
   }
-}
+};
