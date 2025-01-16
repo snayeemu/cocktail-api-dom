@@ -1,14 +1,14 @@
 let items = [];
 let cartItems = [];
-let details = []
+let detailsItem = []
 // initial fetching
 const getData = (w = "s=i", query='search') => {
   fetch(`https://www.thecocktaildb.com/api/json/v1/1/${query}.php?${w}`)
     .then((res) => res.json())
     .then((data) => {
       if(query=='lookup'){
-        details = data?.drinks;
-        console.log(details);
+        detailsItem = data?.drinks[0];
+        console.log(detailsItem);
         showDetails('', false);
         return
       }
@@ -94,7 +94,7 @@ const showDetails = (idDrink, setItem=true) => {
     `
             <div class="modal-header">
               <h1 class="modal-title fs-5" id="modalHeading">
-                Modal title
+                 ${detailsItem?.strDrink}
               </h1>
               <button
                 type="button"
@@ -103,7 +103,15 @@ const showDetails = (idDrink, setItem=true) => {
                 aria-label="Close"
               ></button>
             </div>
-            <div class="modal-body">...</div>
+            <div class="modal-body">
+              <div class="mx-auto">
+                <img class="modal-image" src="${detailsItem?.strDrinkThumb}" alt="">
+                <h4 class="mt-3 fw-bold mb-0">Details</h4>
+                <p class="mb-0">Category: <span>${detailsItem?.strCategory}</span></p>
+                <p>Alcoholic: <span>${detailsItem?.strAlcoholic}</span></p>
+                <p class="small">${detailsItem?.strInstructions}</p>
+              </div>
+            </div>
             <div class="modal-footer">
               <button
                 type="button"
